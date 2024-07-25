@@ -1,8 +1,12 @@
+// Credentials
+// =======================================
+require('dotenv').config();
+const dataBaseUrl = process.env.DATABASE_URL;
+
 // Mongoose
 // =========================================
 const mongoose = require('mongoose');
-const uri = require('./credentials.js')
-mongoose.connect(uri)
+mongoose.connect(dataBaseUrl)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 

@@ -11,13 +11,9 @@ Ouvrir [http://localhost:3000](http://localhost:3000) pour le visualiser dans vo
 
 ## Utilisation Back
 
-Pour la connection  à MongoDB:
-Creer un fichier `credentials.js`
-Y ajouter 
-`const uri = vos identifiants 
-module.exports = uri;`
-L'uri doit avoir la configuartion suivante:
-`mongodb+srv://<id>:<password><cluster-name>.5zfyfee.mongodb.net/?retryWrites=true&w=majority&appName=<cluster-name>`
+Pour la connection à MongoDB:  
+Dans le fichier .env.dist, entrez votre uri comme suit  
+--> `DATABASE_URL=mongodb+srv://<id>:<password><cluster-name>.5zfyfee.mongodb.net/?retryWrites=true&w=majority&appName=<cluster-name>`
 
 ### `cd backend`
 ### `yarn` ou `npm install`
@@ -31,7 +27,7 @@ L'uri doit avoir la configuartion suivante:
 ![image](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ### Scenario 
-Vous êtes développeur back-end en freelance, un développeur front-end plus expérimenté que vous vous propose de travailler avec lui en mutualisant vos compétences front / back sur un tout nouveau projet qui lui a été proposé.
+Vous êtes développeur back-end en freelance, un développeur front-end plus expérimenté que vous vous propose de travailler avec lui en mutualisant vos compétences front / back sur un tout nouveau projet qui lui a été proposé.  
 Il s’agit d’une petite chaîne de librairies qui souhaite ouvrir un site de référencement et de notation de livres : Mon Vieux Grimoire.
 
 ### Missions

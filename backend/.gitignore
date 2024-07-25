@@ -1,5 +1,4 @@
 node_modules/
-
 ideas.txt
-
 credentials.js
+.env
