@@ -74,7 +74,6 @@ exports.updateOneBook = (req, res, next) => {
 
   let bookObject;
   if (req.file) {
-    console.log("req.file.filename", req.file.filename);
     bookObject = {
       ...JSON.parse(req.body.book),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
