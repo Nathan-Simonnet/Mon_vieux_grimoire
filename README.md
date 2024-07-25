@@ -12,8 +12,8 @@ Ouvrir [http://localhost:3000](http://localhost:3000) pour le visualiser dans vo
 ## Utilisation Back
 
 Pour la connection à MongoDB:  
-Dans le fichier .env.dist, entrez votre uri comme suit  
---> `DATABASE_URL=mongodb+srv://<id>:<password><cluster-name>.5zfyfee.mongodb.net/?retryWrites=true&w=majority&appName=<cluster-name>`
+Creez un fichier .env, entrez votre uri comme dans le fichier.env.template   
+--> `DATABASE_URL=mongodb+srv://<id>:<password><cluster-name>.5zfyfee.mongodb.net/?retryWrites=true&w=majority&appName=<cluster-name>`  
 
 ### `cd backend`
 ### `yarn` ou `npm install`
