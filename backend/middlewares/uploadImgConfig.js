@@ -14,7 +14,6 @@ const upload = multer({ storage: storage }).single('image');
 
 module.exports = (req, res, next) => {
   upload(req, res, (err) => {
-    console.log("SHARP")
     if (err) { return res.status(500).json({ error: err.message }); };
 
     // If the image has not been modified

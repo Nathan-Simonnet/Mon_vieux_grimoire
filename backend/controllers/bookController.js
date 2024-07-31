@@ -25,16 +25,18 @@ exports.createBook = (req, res, next) => {
     if (bookObject.ratings.length > 1) {
       return res.status(400).json({ err });
     }
-    // Remove previous automaticaly generated id from mongo
-    delete bookObject._id;
-    // Prevent, in one hand, to save a tampered userID, by deleting the previous one, good or 
-    // corrupted, and adding the one which pass the airport security (middleare,ha)
-    delete bookObject._userId;
+    console.log("bookObject",bookObject)
     const book = new Book({
-      ...bookObject,
       userId: req.auth.userId,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      title: bookObject.title,
+      author: bookObject.author,
+      year: bookObject.year,
+      genre: bookObject.genre,
+      ratings: [{ userId: req.auth.userId, grade: bookObject.ratings[0].grade }],
+      averageRating: bookObject.ratings[0].grade 
     });
+    console.log("book",book)
     // Book saving 
     book.save()
       .then(() => {
@@ -119,20 +121,33 @@ exports.updateOneBook = (req, res, next) => {
   };
 
   // try {
-  console.log("req.file", req.file)
-  console.log("req.body", req.body);
 
   let bookObject;
   // Only if a file is uploaded te body need to be parsed...
   if (req.file) {
+
+    console.log("req.body.book",JSON.parse(req.body.book))
+    // pas ratings!!!
     bookObject = {
-      ...JSON.parse(req.body.book),
+      userId: JSON.parse(req.body.book).userId,
+      title: JSON.parse(req.body.book).title,
+      author: JSON.parse(req.body.book).author,
+      year: JSON.parse(req.body.book).year,
+      genre: JSON.parse(req.body.book).genre,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
   } else {
-    bookObject = { ...req.body };
+    console.log("req.body",req.body )
+    bookObject = { 
+      userId: req.body.userId ,
+      title: req.body.title,
+      author: req.body.author,
+      year: req.body.year,
+      genre:req.body.genre
+    };
   }
-  delete bookObject._userId;
+  console.log(bookObject)
+  // delete bookObject._userId;
   const newImg = bookObject.imageUrl
 
   // Nothing must be empty
@@ -168,7 +183,6 @@ exports.updateOneBook = (req, res, next) => {
             };
             res.status(200).json({ message: 'Livre modifié.' });
           })
-          // .catch(error => res.status(500).json({ error }));
           .catch(error => {
             deleteImageFile(newImg);
             res.status(500).json({ error })
@@ -187,33 +201,33 @@ exports.createRating = (req, res) => {
 
   try {
     Book.findOne({ _id: req.params.id })
-    .then(book => {
-      if (!book) {
-        return res.status(404).json({ message: 'Reference introuvable...' });
-      }
-      const isAlreadyRated = book.ratings.find(rating => rating.userId === req.auth.userId);
-      if (!isAlreadyRated) {
-        book.ratings.push({
-          userId: req.auth.userId,
-          grade: req.body.rating
-        });
+      .then(book => {
+        if (!book) {
+          return res.status(404).json({ message: 'Reference introuvable...' });
+        }
+        const isAlreadyRated = book.ratings.find(rating => rating.userId === req.auth.userId);
+        if (!isAlreadyRated) {
+          book.ratings.push({
+            userId: req.auth.userId,
+            grade: req.body.rating
+          });
 
-        let newRating = 0;
-        book.ratings.forEach(rating => {
-          newRating += rating.grade;
-        });
-        book.averageRating = (newRating / book.ratings.length).toFixed(1);
-        book.save()
-          .then(savedBook => res.status(201).json(savedBook))
-          .catch(error => res.status(500).json({ error }));
-      } else {
-        res.status(403).json({ message: 'Ce livre a déjà été noté' });
-      }
-    })
-    .catch(error => res.status(500).json({ error: error.message }));
-  
+          let newRating = 0;
+          book.ratings.forEach(rating => {
+            newRating += rating.grade;
+          });
+          book.averageRating = (newRating / book.ratings.length).toFixed(1);
+          book.save()
+            .then(savedBook => res.status(201).json(savedBook))
+            .catch(error => res.status(500).json({ error }));
+        } else {
+          res.status(403).json({ message: 'Ce livre a déjà été noté' });
+        }
+      })
+      .catch(error => res.status(500).json({ error: error.message }));
+
   } catch (err) {
-  res.status(500).json({ err })
+    res.status(500).json({ err })
   }
 
 };
